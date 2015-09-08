@@ -1,6 +1,10 @@
 package org.utkuozdemir;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
 import org.utkuozdemir.engine.FloodFillDifferenceFinder;
 
 import javax.imageio.ImageIO;
@@ -10,6 +14,21 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class ImageSavingTest {
+	@Rule
+	public TestName name = new TestName();
+
+	private long start;
+
+	@Before
+	public void start() {
+		start = System.currentTimeMillis();
+	}
+
+	@After
+	public void end() {
+		System.out.println("Test " + name.getMethodName() + " took " + (System.currentTimeMillis() - start) + " ms");
+	}
+
 	@Test
 	public void testImageSaving1() throws IOException {
 		InputStream image1stream = App.class.getClassLoader().getResourceAsStream("image1.png");

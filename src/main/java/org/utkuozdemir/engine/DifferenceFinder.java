@@ -1,10 +1,13 @@
 package org.utkuozdemir.engine;
 
-import org.utkuozdemir.*;
+import org.utkuozdemir.NotSameSizeException;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.*;
+import java.util.Map;
+import java.util.Set;
+
+import static java.util.stream.Collectors.toSet;
 
 public abstract class DifferenceFinder {
 	protected final BufferedImage originalImage;
@@ -48,8 +51,7 @@ public abstract class DifferenceFinder {
 	}
 
 	public Set<Rectangle> getDifferenceRectangles() {
-		Set<Rectangle> rectangles = new HashSet<>();
-		for (Map.Entry<Integer, Set<org.utkuozdemir.engine.point.Point>> entry : groupPoints().entrySet()) {
+		return groupPoints().entrySet().parallelStream().map(entry -> {
 			int minX = Integer.MAX_VALUE;
 			int maxX = Integer.MIN_VALUE;
 			int minY = Integer.MAX_VALUE;
@@ -62,10 +64,8 @@ public abstract class DifferenceFinder {
 				if (point.getY() > maxY) maxY = point.getY();
 			}
 
-			Rectangle rectangle = new Rectangle(minX, maxX, minY, maxY);
-			rectangles.add(rectangle);
-		}
-		return rectangles;
+			return new Rectangle(minX, maxX, minY, maxY);
+		}).collect(toSet());
 	}
 
 

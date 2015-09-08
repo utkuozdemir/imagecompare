@@ -14,8 +14,8 @@ public class App {
 	public static void main(String[] args) {
 		try {
 			if (args.length < 2 || args.length > 3) {
-				System.out.println("Invalid number of arguments. Usage: ");
-				System.out.println("  java -jar comare.jar <imagepath1> <imagepath2> <resultfilename (optional)>");
+				System.out.println("Invalid number of arguments. Usage:");
+				System.out.println("  java -jar compare.jar <imagepath1> <imagepath2> <resultfilename (optional)>");
 				return;
 			}
 

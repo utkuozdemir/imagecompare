@@ -1,6 +1,10 @@
 package org.utkuozdemir;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
 import org.utkuozdemir.engine.FloodFillDifferenceFinder;
 import org.utkuozdemir.engine.ImageAnalysisDifferenceFinder;
 import org.utkuozdemir.engine.Rectangle;
@@ -16,6 +20,20 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class AlgorithmTest {
+	@Rule
+	public TestName name = new TestName();
+
+	private long start;
+
+	@Before
+	public void start() {
+		start = System.currentTimeMillis();
+	}
+
+	@After
+	public void end() {
+		System.out.println("Test " + name.getMethodName() + " took " + (System.currentTimeMillis() - start) + " ms");
+	}
 
 	private Set<Rectangle> compareWithImageAnalysisAlgorithm(String filename1, String filename2) {
 		try {

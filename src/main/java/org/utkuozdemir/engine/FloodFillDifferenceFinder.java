@@ -6,6 +6,7 @@ import org.utkuozdemir.engine.util.ColorUtil;
 
 import java.awt.image.BufferedImage;
 import java.util.*;
+import java.util.stream.IntStream;
 
 import static org.utkuozdemir.engine.Direction.*;
 
@@ -38,24 +39,24 @@ public class FloodFillDifferenceFinder extends DifferenceFinder {
 		DiffPoint[][] diffMatrix = new DiffPoint[originalImage.getWidth()][originalImage.getHeight()];
 
 		// parallel
-//		IntStream.range(0, originalImage.getWidth()).parallel().forEach( i -> {
-//			IntStream.range(0, originalImage.getHeight()).parallel().forEach( j -> {
-//				int pixel1 = originalImage.getRGB(i, j);
-//				int pixel2 = differenceImage.getRGB(i, j);
-//				boolean different = ColorUtil.diffInPercentage(pixel1, pixel2) > 0.1;
-//				diffMatrix[i][j] = new DiffPoint(diffMatrix, i, j, different);
-//			});
-//		});
-
-		// non-parallel
-		for (int i = 0; i < originalImage.getWidth(); i++) {
-			for (int j = 0; j < originalImage.getHeight(); j++) {
+		IntStream.range(0, originalImage.getWidth()).parallel().forEach(i -> {
+			IntStream.range(0, originalImage.getHeight()).parallel().forEach(j -> {
 				int pixel1 = originalImage.getRGB(i, j);
 				int pixel2 = differenceImage.getRGB(i, j);
 				boolean different = ColorUtil.diffInPercentage(pixel1, pixel2) > 0.1;
 				diffMatrix[i][j] = new DiffPoint(diffMatrix, i, j, different);
-			}
-		}
+			});
+		});
+
+		// non-parallel
+//		for (int i = 0; i < originalImage.getWidth(); i++) {
+//			for (int j = 0; j < originalImage.getHeight(); j++) {
+//				int pixel1 = originalImage.getRGB(i, j);
+//				int pixel2 = differenceImage.getRGB(i, j);
+//				boolean different = ColorUtil.diffInPercentage(pixel1, pixel2) > 0.1;
+//				diffMatrix[i][j] = new DiffPoint(diffMatrix, i, j, different);
+//			}
+//		}
 
 		long end = System.currentTimeMillis();
 //		System.out.println("Diff matrix took " + (end - start) + " milliseconds...");
